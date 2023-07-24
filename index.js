@@ -13,7 +13,7 @@ balanceButton.onclick = getBalance
 async function connect() {
   if (typeof window.ethereum !== "undefined") {
     try {
-      await ethereum.request({ method: "eth_requestAccounts" })
+      await ethereum.request({ method: "eth_requestAccounts" }) // to test if provider (connection) is working
     } catch (error) {
       console.log(error)
     }
@@ -28,8 +28,11 @@ async function connect() {
 async function withdraw() {
   console.log(`Withdrawing...`)
   if (typeof window.ethereum !== "undefined") {
+    // provider -> signer -> contract -> contract function
+    // new ethers.providers.Web3Provider(window.ethereum) -> provider.getSigner() -> new ethers.Contract(contractAddress, abi, signer) -> contract.withdraw()
+
     const provider = new ethers.providers.Web3Provider(window.ethereum)
-    await provider.send('eth_requestAccounts', [])
+    await provider.send("eth_requestAccounts", []) // to test if provider (connection) is working
     const signer = provider.getSigner()
     const contract = new ethers.Contract(contractAddress, abi, signer)
     try {
@@ -51,6 +54,7 @@ async function fund() {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const signer = provider.getSigner()
     const contract = new ethers.Contract(contractAddress, abi, signer)
+
     try {
       const transactionResponse = await contract.fund({
         value: ethers.utils.parseEther(ethAmount),
